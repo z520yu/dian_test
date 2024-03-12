@@ -7,3 +7,8 @@
 代码如下：
 
 [Neural Network.py](https://github.com/z520yu/dian_test/blob/master/Neural%20Network.py)
+
+数据如下：
+
+
+
