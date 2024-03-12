@@ -6,4 +6,4 @@
 
 代码如下：
 
-[NeuralNetwork.py](https://github.com/z520yu/dian_test/blob/master/Neural%20Network.py)
+[Neural Network.py](https://github.com/z520yu/dian_test/blob/master/Neural%20Network.py)
