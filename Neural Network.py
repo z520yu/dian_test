@@ -53,6 +53,9 @@ batch_size = 64
 train_dataloader = DataLoader(training_data, batch_size=batch_size)
 test_dataloader = DataLoader(test_data, batch_size=batch_size)
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using {device} device")
+
 # 定义模型
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -94,6 +97,7 @@ def train(dataloader, model, loss_fn, optimizer):
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+    return loss
 
 # 测试过程
 def test(dataloader, model, loss_fn):
@@ -118,10 +122,58 @@ def test(dataloader, model, loss_fn):
     recall_all /= num_batches
     f1_all /= num_batches
     print(f"Test Error: \n Accuracy: {(100*accuracy_all):>0.1f}%, Precision: {(100*precision_all):>0.1f}%, Recall: {(100*recall_all):>0.1f}%, F1: {(100*f1_all):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    return test_loss, accuracy_all, precision_all, recall_all, f1_all
+
 # 训练模型
-epochs = 30
+epochs = 100
+train_losses = []
+test_losses = []
+accuracy_all = []
+precision_all = []
+recall_all = []
+f1_all = []
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
-    train(train_dataloader, model, loss_fn, optimizer)
-    test(test_dataloader, model, loss_fn)
+    train_loss=train(train_dataloader, model, loss_fn, optimizer)
+    test_loss,accuracy,precision,recall,f1=test(test_dataloader, model, loss_fn)
+    # 将trian_loss和test_loss转换为numpy类型
+    train_loss = train_loss.cpu().detach().numpy()
+    # 收集每个epoch的训练损失和测试损失
+    train_losses.append(train_loss)
+    test_losses.append(test_loss)
+    accuracy_all.append(accuracy)
+    precision_all.append(precision)
+    recall_all.append(recall)
+    f1_all.append(f1)
+
+# 绘出指标变化图
+import matplotlib.pyplot as plt
+epochs = range(1, len(train_losses) + 1)
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(epochs, accuracy_all, label='Accuracy', marker='o', linestyle='-')
+plt.plot(epochs, precision_all, label='Precision', marker='s', linestyle='--')
+plt.plot(epochs, recall_all, label='Recall', marker='^', linestyle='-.')
+plt.plot(epochs, f1_all, label='F1 Score', marker='*', linestyle=':')
+
+plt.title('Model Performance Over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Metric')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+# 绘出损失变化图
+plt.figure(figsize=(10, 6))
+plt.plot(epochs, train_losses, label='Train')
+plt.plot(epochs, test_losses, label='Test')
+plt.title('Loss Over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.grid(True)
+plt.show()
+
 print("Done!")
