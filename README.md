@@ -10,5 +10,9 @@
 
 数据如下：
 
+![accuracy.png](https://github.com/z520yu/dian_test/blob/master/accuracy.png)
+
+![loss.png](https://github.com/z520yu/dian_test/blob/master/loss.png)
+
 
 
