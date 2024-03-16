@@ -53,5 +53,24 @@
 
 ![attention hot map.png](https://github.com/z520yu/dian_test/blob/master/attention%20hot%20map.png)
 
+### 3.16
+
+- **任务 1**: 修正昨天多头注意力代码。
+
+- **学习内容**:笔者在学习MQA,GQA时，重新阅读了一下多头注意力机制的计算方式，发现网上有两种说法，一种是每个序列完整的给到单个头，算出多个头的结果后线性变换，另一种是将一个序列切割成八份（八个头）分别给到不同的头进行计算，最后再合并后线性变换。我便找到论文，阅读后发现应该是后者正确，我昨天的代码是前者的做法，故今天修改。
+
+论文中多头注意力解释如下图：
+![multi_head_paper.png](https://github.com/z520yu/dian_test/blob/master/multi_head_paper.png)
+
+
+修改后代码如下：
+
+[multi_head_attention.py](https://github.com/z520yu/dian_test/blob/master/multi_head_attention.py)
+
+这次我将八个头的注意力取平均后画成热力图，图片如下：
+
+
+![ave_attention_map.png](https://github.com/z520yu/dian_test/blob/master/ave_attention_map.png)
+
 
 
