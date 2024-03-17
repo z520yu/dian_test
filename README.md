@@ -72,5 +72,21 @@
 
 ![ave_attention_map.png](https://github.com/z520yu/dian_test/blob/master/ave_attention_map.png)
 
+- **任务 2**: 完成MQA,GQA注意力代码。
+
+- **学习内容**:学习MQA，GAQ的基本原理，MQA就是多个查询，一个键，一个值，就把查询按注意力头数切割，键和值线性变换成查询的大小，然后在每个头分别计算后再剪切到一起后线性变换得到输出；GAQ即按查询分组，可以理解成，查询的头数与键，值头数成倍数，一个键值对应多个查询，我这里将查询按照键，值的头数增加张量维数，即2*4（查询头数），4（键，值头数），便于进行张量乘法计算。
+
+
+代码如下：
+
+[MQA_GQA.py](https://github.com/z520yu/dian_test/blob/master/MQA_GQA.py)
+
+也是将八个头的注意力取平均后画成热力图，MQA与GQA热力图如下：
+
+
+![MQA_attention.png](https://github.com/z520yu/dian_test/blob/master/MQA_attention.png)
+
+![GQA_attention.png](https://github.com/z520yu/dian_test/blob/master/GQA_attention.png)
+
 
 
