@@ -89,4 +89,68 @@
 ![GQA_attention.png](https://github.com/z520yu/dian_test/blob/master/GQA_attention.png)
 
 
+### 3.17
 
+- **任务 1**: 使用NNI实现自动化机器学习调节超参。
+
+- **学习内容**:阅读NNI官方文档，学习如何使用NNI框架为模型选择合理参数。
+本次调节参数的搜索空间如下：
+```yaml
+search_space:
+  features1:
+    _type: 'choice'
+    _value:
+      - 128
+      - 256
+      - 512
+      - 1024
+  features2:
+    _type: 'choice'
+    _value:
+      - 128
+      - 256
+      - 512
+      - 1024
+  lr:
+    _type: 'loguniform'
+    _value:
+      - 0.0001
+      - 0.1
+  batch_size:
+    _type: 'choice'
+    _value:
+      - 32
+      - 64
+      - 128
+      - 256
+```
+
+使用TPE即贝叶斯优化来进行搜索，一共尝试了10次。
+
+
+因需要使用框架，对第一题的代码进行略微修改后代码如下：
+
+[nn_choose_params.py](https://github.com/z520yu/dian_test/blob/master/nn_choose_params.py)
+
+框架调用代码如下：
+
+[trial.py](https://github.com/z520yu/dian_test/blob/master/trial.py)
+
+10次测试的结果图片如下：
+
+
+![params_result.png](https://github.com/z520yu/dian_test/blob/master/params_result.png)
+
+
+可以看到，最高的accuracy为0.979，其各参数设置如下：
+
+```json
+{
+    "features1": 512,
+    "features2": 1024,
+    "lr": 0.05845589437848884,
+    "batch_size": 32
+}
+```
+
+可能是20个epoch，大多数都没有过拟合，通过我的观察，学习率是影响相对最大的，其他的几个参数也都有影响。
